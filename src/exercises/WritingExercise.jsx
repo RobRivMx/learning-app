@@ -5,7 +5,6 @@ function WritingExercise({ exerciseData, onCorrectAnswer }) {
   const [studentText, setStudentText] = useState('');
   const [feedback, setFeedback] = useState(null);
   const [isChecking, setIsChecking] = useState(false);
-  // Nuevo estado para guardar el feedback de las herramientas
   const [toolFeedback, setToolFeedback] = useState(''); 
   const token = localStorage.getItem('token');
 
@@ -13,7 +12,7 @@ function WritingExercise({ exerciseData, onCorrectAnswer }) {
     event.preventDefault();
     setIsChecking(true);
     setFeedback(null);
-    setToolFeedback(''); // Limpiamos el feedback de herramientas al enviar
+    setToolFeedback(''); 
     
     try {
       const response = await fetch('http://127.0.0.1:8000/api/writing/feedback', {
@@ -69,12 +68,11 @@ function WritingExercise({ exerciseData, onCorrectAnswer }) {
       });
       const data = await response.json();
 
-      // Comportamiento específico para cada botón
       if (toolType === 'example') {
-        setStudentText(data.result); // Pone el ejemplo en el área de texto
-        setToolFeedback(''); // Limpia el mensaje de "obteniendo ayuda"
+        setStudentText(data.result);
+        setToolFeedback('');
       } else {
-        setToolFeedback(data.result); // Muestra la sugerencia o corrección debajo
+        setToolFeedback(data.result);
       }
     } catch (error) {
       setToolFeedback("Error al usar la herramienta de IA.");
@@ -83,7 +81,7 @@ function WritingExercise({ exerciseData, onCorrectAnswer }) {
 
   return (
     <div className="exercise-card">
-      <h2 className="exercise-title">✍️ Writing Exercise</h2>
+      <h2 className="exercise-title">✍️ {exerciseData.title || 'Writing Exercise'}</h2>
       <p className="exercise-instruction">{exerciseData.instruction}</p>
       
       <form onSubmit={handleSubmit}>
@@ -101,7 +99,6 @@ function WritingExercise({ exerciseData, onCorrectAnswer }) {
           <button type="button" className="tool-btn" onClick={() => handleToolClick('example')}>💡 Show Example</button>
         </div>
 
-        {/* Nuevo div para mostrar el feedback de las herramientas */}
         {toolFeedback && (
           <div className="feedback success show" style={{ marginTop: '1rem' }}>
             {toolFeedback}

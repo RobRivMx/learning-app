@@ -1,8 +1,8 @@
-// src/exercises/QuizExercise.jsx
+// src/exercises/ReadingExercise.jsx
 import { useState } from 'react';
 
-// Un sub-componente para manejar una sola pregunta del quiz
-function QuizQuestion({ questionData, onAnswered }) {
+// Reutilizamos el sub-componente del Quiz para las preguntas de comprensión
+function ComprehensionQuestion({ questionData, onAnswered }) {
   const [selectedOption, setSelectedOption] = useState(null);
   const [isCorrect, setIsCorrect] = useState(null);
   const [submitted, setSubmitted] = useState(false);
@@ -11,14 +11,9 @@ function QuizQuestion({ questionData, onAnswered }) {
     if (submitted) return;
     setSelectedOption(option);
     setSubmitted(true);
-
-    if (option === questionData.answer) {
-      setIsCorrect(true);
-      onAnswered(true); // Informa al padre que la respuesta fue correcta
-    } else {
-      setIsCorrect(false);
-      onAnswered(false); // Informa al padre que fue incorrecta
-    }
+    const correct = option === questionData.answer;
+    setIsCorrect(correct);
+    onAnswered(correct);
   };
 
   return (
@@ -46,17 +41,14 @@ function QuizQuestion({ questionData, onAnswered }) {
 }
 
 
-// El componente principal del ejercicio
-function QuizExercise({ exerciseData, onCorrectAnswer }) {
-  const [correctAnswers, setCorrectAnswers] = useState(0);
+function ReadingExercise({ exerciseData, onCorrectAnswer }) {
+  const [correctCount, setCorrectCount] = useState(0);
 
   const handleQuestionAnswered = (wasCorrect) => {
     if (wasCorrect) {
-      const newScore = correctAnswers + 1;
-      setCorrectAnswers(newScore);
-
-      // Si todas las preguntas son correctas, suma los puntos de XP
-      if (newScore === exerciseData.questions.length) {
+      const newCount = correctCount + 1;
+      setCorrectCount(newCount);
+      if (newCount === exerciseData.comprehension_quiz.questions.length) {
         onCorrectAnswer();
       }
     }
@@ -64,13 +56,24 @@ function QuizExercise({ exerciseData, onCorrectAnswer }) {
 
   return (
     <div className="exercise-card">
-      <h2 className="exercise-title">📝 {exerciseData.title || 'Quiz'}</h2>
+      <h2 className="exercise-title">📚 {exerciseData.title || 'Reading Comprehension'}</h2>
       <p className="exercise-instruction">{exerciseData.instruction}</p>
       
-      {exerciseData.questions.map((question) => (
-        <QuizQuestion 
-          key={question.id}
-          questionData={question}
+      {exerciseData.image_url && (
+        <img src={exerciseData.image_url} alt="Reading context" style={{ width: '100%', borderRadius: '8px', marginBottom: '1rem' }} />
+      )}
+      
+      <div style={{ background: 'var(--light-gray)', padding: '1.5rem', borderRadius: '8px', marginBottom: '1.5rem', whiteSpace: 'pre-wrap' }}>
+        <p>{exerciseData.text}</p>
+      </div>
+
+      <hr style={{margin: '2rem 0'}}/>
+
+      <h4>Comprensión:</h4>
+      {exerciseData.comprehension_quiz.questions.map(q => (
+        <ComprehensionQuestion 
+          key={q.id}
+          questionData={q}
           onAnswered={handleQuestionAnswered}
         />
       ))}
@@ -78,4 +81,4 @@ function QuizExercise({ exerciseData, onCorrectAnswer }) {
   );
 }
 
-export default QuizExercise;
+export default ReadingExercise;

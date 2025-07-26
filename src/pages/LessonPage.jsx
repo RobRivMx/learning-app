@@ -2,12 +2,17 @@
 import { useState, useEffect } from 'react';
 import { useParams } from 'react-router-dom';
 import Header from '../components/Header';
+import GrammarNotes from '../exercises/GrammarNotes';
 import QuizExercise from '../exercises/QuizExercise';
 import FillInTheBlankExercise from '../exercises/FillInTheBlankExercise';
 import MatchingExercise from '../exercises/MatchingExercise';
 import WritingExercise from '../exercises/WritingExercise';
 import ListeningExercise from '../exercises/ListeningExercise';
 import SpeakingExercise from '../exercises/SpeakingExercise';
+import ErrorDetectionExercise from '../exercises/ErrorDetectionExercise'; 
+import ReadingExercise from '../exercises/ReadingExercise';
+import PronunciationExercise from '../exercises/PronunciationExercise';
+import SpacyInLesson from '../components/SpacyInLesson';
 
 function LessonPage() {
   const [lesson, setLesson] = useState(null);
@@ -71,7 +76,10 @@ function LessonPage() {
         <h1>{lesson.title}</h1>
         
         {lesson.exercises.map(exercise => {
-          if (exercise.exercise_type === 'quiz') {
+          if (exercise.exercise_type === 'grammar_notes') {
+            return <GrammarNotes key={exercise.id} exerciseData={exercise.data} />;
+          }
+          else if (exercise.exercise_type === 'quiz') {
             return <QuizExercise key={exercise.id} exerciseData={exercise.data} onCorrectAnswer={handleCorrectAnswer} />;
           } 
           else if (exercise.exercise_type === 'fill_in_the_blank') {
@@ -80,17 +88,28 @@ function LessonPage() {
           else if (exercise.exercise_type === 'matching') {
             return <MatchingExercise key={exercise.id} exerciseData={exercise.data} onCorrectAnswer={handleCorrectAnswer} />;
           }
-          else if (exercise.exercise_type === 'writing') {
-            return <WritingExercise key={exercise.id} exerciseData={exercise.data} onCorrectAnswer={handleCorrectAnswer} />;
-          }
           else if (exercise.exercise_type === 'listening') {
             return <ListeningExercise key={exercise.id} exerciseData={exercise.data} onCorrectAnswer={handleCorrectAnswer} />;
+          }
+          else if (exercise.exercise_type === 'pronunciation') {
+            return <PronunciationExercise key={exercise.id} exerciseData={exercise.data} onCorrectAnswer={handleCorrectAnswer} />;
+          }
+          else if (exercise.exercise_type === 'error_detection') {
+            return <ErrorDetectionExercise key={exercise.id} exerciseData={exercise.data} onCorrectAnswer={handleCorrectAnswer} />;
+          }
+          else if (exercise.exercise_type === 'reading') {
+            return <ReadingExercise key={exercise.id} exerciseData={exercise.data} onCorrectAnswer={handleCorrectAnswer} />;
+          }
+          else if (exercise.exercise_type === 'writing') {
+            return <WritingExercise key={exercise.id} exerciseData={exercise.data} onCorrectAnswer={handleCorrectAnswer} />;
           }
           else if (exercise.exercise_type === 'speaking') {
             return <SpeakingExercise key={exercise.id} exerciseData={exercise.data} onCorrectAnswer={handleCorrectAnswer} />;
           }
-          return null; // No mostrar nada para otros tipos de ejercicios por ahora
+          return null;
         })}
+
+        <SpacyInLesson lessonTopic={lesson.title} />
       </main>
     </div>
   );
