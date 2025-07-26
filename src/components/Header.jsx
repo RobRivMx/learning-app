@@ -1,8 +1,17 @@
 // src/components/Header.jsx
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 
 function Header() {
   const user = JSON.parse(localStorage.getItem('user'));
+  const navigate = useNavigate();
+
+  const handleLogout = () => {
+    // Borramos los datos del usuario del almacenamiento
+    localStorage.removeItem('token');
+    localStorage.removeItem('user');
+    // Navegamos a la página de login
+    navigate('/login');
+  };
 
   return (
     <header className="header">
@@ -17,8 +26,13 @@ function Header() {
         </nav>
         <div className="user-section">
           {user && <span className="xp-badge">{user.xp} XP</span>}
-          <button className="notification-btn">🔔</button>
-          <div className="user-avatar">
+          {/* Hacemos que el avatar sea un botón para cerrar sesión */}
+          <div 
+            className="user-avatar" 
+            onClick={handleLogout} 
+            title="Cerrar Sesión"
+            style={{cursor: 'pointer'}}
+          >
             {user ? user.email.substring(0, 2).toUpperCase() : 'G'}
           </div>
         </div>

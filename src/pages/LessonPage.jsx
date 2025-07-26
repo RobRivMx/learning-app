@@ -5,7 +5,9 @@ import Header from '../components/Header';
 import QuizExercise from '../exercises/QuizExercise';
 import FillInTheBlankExercise from '../exercises/FillInTheBlankExercise';
 import MatchingExercise from '../exercises/MatchingExercise';
-import WritingExercise from '../exercises/WritingExercise'; // 1. Importa el nuevo componente
+import WritingExercise from '../exercises/WritingExercise';
+import ListeningExercise from '../exercises/ListeningExercise';
+import SpeakingExercise from '../exercises/SpeakingExercise';
 
 function LessonPage() {
   const [lesson, setLesson] = useState(null);
@@ -78,11 +80,16 @@ function LessonPage() {
           else if (exercise.exercise_type === 'matching') {
             return <MatchingExercise key={exercise.id} exerciseData={exercise.data} onCorrectAnswer={handleCorrectAnswer} />;
           }
-          // 2. Añade la lógica para mostrar el ejercicio de escritura
           else if (exercise.exercise_type === 'writing') {
             return <WritingExercise key={exercise.id} exerciseData={exercise.data} onCorrectAnswer={handleCorrectAnswer} />;
           }
-          return null;
+          else if (exercise.exercise_type === 'listening') {
+            return <ListeningExercise key={exercise.id} exerciseData={exercise.data} onCorrectAnswer={handleCorrectAnswer} />;
+          }
+          else if (exercise.exercise_type === 'speaking') {
+            return <SpeakingExercise key={exercise.id} exerciseData={exercise.data} onCorrectAnswer={handleCorrectAnswer} />;
+          }
+          return null; // No mostrar nada para otros tipos de ejercicios por ahora
         })}
       </main>
     </div>

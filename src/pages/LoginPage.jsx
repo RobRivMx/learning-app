@@ -1,6 +1,6 @@
 // src/pages/LoginPage.jsx
 import { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, Link } from 'react-router-dom';
 
 function LoginPage() {
   const [email, setEmail] = useState('');
@@ -25,7 +25,6 @@ function LoginPage() {
 
       if (response.ok) {
         const data = await response.json();
-        // Guardamos el token Y los datos del usuario que ahora sí vienen de la API
         localStorage.setItem('token', data.access_token);
         localStorage.setItem('user', JSON.stringify(data.user)); 
         navigate('/');
@@ -70,6 +69,9 @@ function LoginPage() {
           Entrar
         </button>
       </form>
+      <p style={{ marginTop: '1rem', textAlign: 'center' }}>
+        ¿No tienes una cuenta? <Link to="/register" style={{ color: '#6B46C1' }}>Regístrate aquí</Link>
+      </p>
     </div>
   );
 }
